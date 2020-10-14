@@ -1,5 +1,7 @@
 ---
-description: '王博(wanber),毕业于湖南大学，曾实习于华为运营商BG、CVTE 希沃，长沙链学小窗教育科技有限公司联合创始人，现任Grab中国后端开发工程师。'
+description: >-
+  王博(wanber),毕业于湖南大学，曾实习于华为运营商BG、CVTE
+  希沃，长沙链学小窗教育科技有限公司联合创始人(Java后端开发)，现任Grab中国后端开发工程师（Go后端开发）。
 ---
 
 # Introduction

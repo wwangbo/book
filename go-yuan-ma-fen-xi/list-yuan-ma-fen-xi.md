@@ -2,6 +2,8 @@
 
 ### 源码分析 <a id="h"></a>
 
+List,Ring,Heap均位于container包下面
+
 List实际上是由一个个Element组成，List和Element的定义如下:
 
 ```text

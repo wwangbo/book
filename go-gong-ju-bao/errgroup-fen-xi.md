@@ -23,7 +23,6 @@ type Group struct {
 	err     error //记录error
 }
 
-// 要注意，这里返回的是一个新的ctx
 func WithContext(ctx context.Context) (*Group, context.Context) {
 	ctx, cancel := context.WithCancel(ctx)
 	return &Group{cancel: cancel}, ctx

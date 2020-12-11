@@ -17,43 +17,35 @@ import (
 type Group struct {
 	cancel func() //用于一个goroutine返回error，将信号发送给其他goroutine
 
-	wg sync.WaitGroup
+	wg sync.WaitGroup //用于等待所有goroutine执行完成
 
-	errOnce sync.Once
-	err     error
+	errOnce sync.Once //保证只会将第一个error返回
+	err     error //记录error
 }
 
-// WithContext returns a new Group and an associated Context derived from ctx.
-//
-// The derived Context is canceled the first time a function passed to Go
-// returns a non-nil error or the first time Wait returns, whichever occurs
-// first.
+
 func WithContext(ctx context.Context) (*Group, context.Context) {
 	ctx, cancel := context.WithCancel(ctx)
 	return &Group{cancel: cancel}, ctx
 }
 
-// Wait blocks until all function calls from the Go method have returned, then
-// returns the first non-nil error (if any) from them.
+// 等待所有的goroutine执行完，或有一个返回错误
 func (g *Group) Wait() error {
 	g.wg.Wait()
 	if g.cancel != nil {
-		g.cancel()
+		g.cancel() 
 	}
 	return g.err
 }
 
-// Go calls the given function in a new goroutine.
-//
-// The first call to return a non-nil error cancels the group; its error will be
-// returned by Wait.
+
 func (g *Group) Go(f func() error) {
 	g.wg.Add(1)
 
 	go func() {
 		defer g.wg.Done()
 
-		if err := f(); err != nil {
+		if err := f(); err != nil {//执行函数，如果返回了err，调用cancel停止其他goroutine继续执行
 			g.errOnce.Do(func() {
 				g.err = err
 				if g.cancel != nil {

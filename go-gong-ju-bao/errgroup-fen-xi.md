@@ -56,6 +56,20 @@ func (g *Group) Go(f func() error) {
 }
 ```
 
+
+
+* 核心原理
+  * 利用sync.WaitGroup管理并执行goroutine
+* 主要功能
+  * 并行工作流
+  * 处理错误 或者 优雅降级
+  * context 传播与取消
+  * 利用局部变量+闭包
+* 设计缺陷 --- [改进](https://github.com/go-kratos/kratos/blob/master/pkg/sync/errgroup/errgroup.go)
+  * 没有捕获panic，导致程序异常退出 --- 改进 加defer recover
+  * 没有限制goroutine数量，存在大量创建goroutine --- 改进 增加一个channel用来消费func
+  * WithContext 返回的context可能被异常调用，当其在errgroup中被取消时，影响其它函数 --- 改进 代码内嵌context
+
 官网上有它的样例代码，使用起来非常简单，不再具体分析了。
 
 ```text
